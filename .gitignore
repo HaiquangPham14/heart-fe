@@ -1,0 +1,102 @@
+# === Node & package managers ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Khóa gói (GIỮ trong repo để build ổn định)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# === Build outputs ===
+dist/
+build/
+.esbuild/
+.turbo/
+.tsup/
+out/
+
+# === Bundlers / Tooling caches ===
+.vite/
+vite.config.ts.timestamp-*
+.parcel-cache/
+.cache/
+.storybook-out/
+.storybook-cache/
+storybook-static/
+.next/              # nếu dự án dùng Next.js trong monorepo
+.nuxt/              # nếu có Nuxt trong monorepo
+
+# === Test coverage / runners ===
+coverage/
+.nyc_output/
+jest-html-reporters-*.html
+jest-stare/
+.tap/
+test-results/
+playwright-report/
+playwright/.cache/
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
+# === TypeScript ===
+*.tsbuildinfo
+
+# === Linters / Formatters ===
+.eslintcache
+.stylelintcache
+
+# === Env files ===
+# GIỮ .env.example, ignore file thật
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# === IDE / Editors ===
+.vscode/
+.idea/
+*.iml
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.history/
+.DS_Store
+Thumbs.db
+
+# === Logs & misc ===
+*.log
+logs/
+*.pid
+*.seed
+*.pid.lock
+
+# === OS & tooling ===
+*.DS_Store
+*.orig
+*.patch
+*.rej
+
+# === Framework hosts (nếu có) ===
+.vercel/
+.netlify/
+
+# === Images/build artifacts tạm ===
+*.tgz
+*.tar.gz
+
+# === Storybook (nếu dùng) ===
+.storybook-out/
+.storybook-cache/
+
+# === Optional: lockfiles của pnpm workspace (nếu không dùng) ===
+# **/pnpm-lock.yaml

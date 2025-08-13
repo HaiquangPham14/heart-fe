@@ -1,0 +1,769 @@
+/* =========================================
+   Base reset & foundations
+========================================= */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+:where(h1, h2, h3, p, ul, ol, figure) {
+  margin: 0;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ===== Global background (tím tím như ban đầu) ===== */
+html {
+  /* tránh viền seam đáy trên vài trình duyệt */
+  background-color: var(--app-bg-2);
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  color: #fff;
+
+  /* NỀN TÍM: một nền duy nhất cho toàn site */
+  background: linear-gradient(180deg, var(--app-bg-0), var(--app-bg-1) 40%, var(--app-bg-2));
+  background-attachment: scroll;
+  /* tránh giật/seam trên iOS khi fixed */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Đồng bộ: không cho các khu vực tự tô nền khác gây “đổi màu” khi cuộn */
+.give-wrap,
+.container,
+main,
+section,
+nav,
+header,
+footer,
+.page-slab,
+.feature-dock,
+.hero {
+  background: transparent !important;
+}
+
+/* Xoá mọi overlay/pseudo phủ nền có thể gây vệt màu khi cuộn */
+body::before,
+body::after,
+.give-wrap::before,
+.give-wrap::after,
+.hero::before,
+.hero::after,
+.feature-dock::before,
+.feature-dock::after,
+.page-slab::before,
+.page-slab::after {
+  content: none !important;
+  background: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+/* =========================================
+   Design tokens
+   (palette tím)
+========================================= */
+:root {
+  --brand-50: #f5f3ff;
+  --brand-100: #ede9fe;
+  --brand-500: #d8b4fe;
+  --brand-600: #c084fc;
+  /* tím chủ đạo */
+  --brand-700: #a78bfa;
+  --accent-500: #f0abfc;
+  --accent-600: #e879f9;
+  --accent-700: #d946ef;
+
+  --w-90: rgba(255, 255, 255, .90);
+  --w-80: rgba(255, 255, 255, .80);
+  --w-60: rgba(255, 255, 255, .60);
+  --w-40: rgba(255, 255, 255, .40);
+
+  --surface: rgba(255, 255, 255, .09);
+  --surface-2: rgba(255, 255, 255, .13);
+  --surface-3: rgba(255, 255, 255, .17);
+  --radius-xl: 20px;
+  --radius-md: 14px;
+  --shadow-lg: 0 22px 55px rgba(0, 0, 0, .38);
+  --shadow-md: 0 12px 30px rgba(0, 0, 0, .26);
+  --safe-bottom: env(safe-area-inset-bottom, 16px);
+
+  /* App background tím (đậm dần) */
+  --app-bg-0: #17132a;
+  /* tím rất sẫm ở top */
+  --app-bg-1: #20163c;
+  /* tím sẫm trung gian */
+  --app-bg-2: #2a1a55;
+  /* tím đậm hơn ở đáy */
+}
+
+::selection {
+  background: rgba(192, 132, 252, .35);
+  /* tím nhạt */
+}
+
+.container {
+  width: min(1120px, 100%);
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+
+/* =========================================
+   Header (glass)
+   (mỏng, không phá nền tím)
+========================================= */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(10px);
+  background: rgba(20, 18, 36, .18);
+  /* tím trong suốt nhẹ */
+  border-bottom: 1px solid rgba(255, 255, 255, .10);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
+}
+
+.brand-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--surface-2), var(--surface-3));
+  display: grid;
+  place-items: center;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12);
+}
+
+/* =========================================
+   Card (glass)
+========================================= */
+.card {
+  background: linear-gradient(135deg, var(--surface), var(--surface-2));
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  color: #fff;
+}
+
+/* =========================================
+   Forms
+========================================= */
+.label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: var(--w-80);
+}
+
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, .20);
+  background: rgba(255, 255, 255, .12);
+  color: #fff;
+  outline: none;
+  transition: box-shadow .18s ease, border-color .18s ease, background .18s ease;
+}
+
+.input::placeholder {
+  color: var(--w-40);
+}
+
+.input:focus {
+  border-color: var(--brand-600);
+  box-shadow: 0 0 0 3px rgba(192, 132, 252, .32);
+  background: rgba(255, 255, 255, .14);
+}
+
+/* Ẩn nút eye/clear mặc định (ô trắng khó chịu) */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="text"]::-ms-clear {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none !important;
+}
+
+/* Nút con mắt (show/hide password) – đồng màu theme */
+.input-action {
+  position: absolute;
+  inset: 0 8px 0 auto;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: calc(100% - 8px);
+  top: 4px;
+  right: 8px;
+  background: linear-gradient(180deg, var(--brand-600), var(--accent-600));
+  border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 10px;
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(192, 132, 252, .22);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+}
+
+.input-action:hover {
+  filter: brightness(1.06);
+}
+
+.input-action:focus-visible {
+  outline: 2px solid var(--brand-700);
+  outline-offset: 2px;
+}
+
+.input-action svg {
+  opacity: .95;
+}
+
+/* Khi bật hiện mật khẩu – màu chữ nhạt tiệp nền */
+.input.pw-visible {
+  color: var(--w-40);
+  caret-color: var(--w-60);
+}
+
+.input.pw-visible::selection {
+  background: rgba(255, 255, 255, .15);
+}
+
+/* =========================================
+   Buttons
+========================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-weight: 800;
+  cursor: pointer;
+  border: 0;
+  transition: background .18s ease, box-shadow .18s ease, opacity .18s ease;
+  color: #fff;
+  /* đảm bảo chữ luôn trắng */
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, var(--brand-600), var(--accent-600));
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(167, 139, 250, .28);
+}
+
+.btn-primary:hover {
+  filter: brightness(1.06);
+}
+
+.btn-primary:disabled {
+  opacity: .7;
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, .12);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, .18);
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, .16);
+}
+
+/* Spinner */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, .7);
+  border-top-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: spin .8s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error */
+.error {
+  background: rgba(244, 63, 94, .14);
+  border: 1px solid rgba(244, 63, 94, .45);
+  color: #ffd6db;
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+/* =========================================
+   HERO (30% màn hình: logo)
+========================================= */
+.hero {
+  height: 30vh;
+  display: grid;
+  place-items: center;
+  padding: 12px 16px;
+}
+
+.hero-inner {
+  width: min(720px, 92vw);
+  display: grid;
+  place-items: center;
+}
+
+.hero-logo {
+  width: min(400px, 72vw);
+  aspect-ratio: 16/9;
+  object-fit: contain;
+  filter: drop-shadow(0 22px 50px rgba(0, 0, 0, .35));
+  opacity: .98;
+  transition: transform .25s ease, opacity .25s ease;
+}
+
+.hero-logo:hover {
+  transform: translateY(-2px) scale(1.01);
+  opacity: 1;
+}
+
+/* =========================================
+   FEATURE DOCK (5 hàng từ top:30% tới đáy)
+========================================= */
+.feature-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 30vh;
+  bottom: 0;
+  z-index: 30;
+  padding: 16px 16px calc(16px + var(--safe-bottom));
+  display: grid;
+  align-content: start;
+  pointer-events: none;
+}
+
+.feature-dock-inner {
+  width: min(720px, 100%);
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.dock-panel {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, .12));
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, .20);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: 16px;
+  pointer-events: auto;
+}
+
+.dock-stack {
+  display: grid;
+  grid-template-rows: repeat(5, minmax(58px, auto));
+  gap: 14px;
+}
+
+.feature-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  color: #fff;
+  background: rgba(255, 255, 255, .15);
+  border: 1px solid rgba(255, 255, 255, .22);
+  transition: background .18s ease, border-color .18s ease, box-shadow .18s ease;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .22);
+}
+
+.feature-btn:hover {
+  background: rgba(255, 255, 255, .19);
+  border-color: rgba(255, 255, 255, .28);
+}
+
+.feature-btn .icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--brand-600), var(--accent-600));
+  display: grid;
+  place-items: center;
+  box-shadow: 0 10px 22px rgba(167, 139, 250, .30);
+}
+
+.feature-btn .text .title {
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.feature-btn .text .desc {
+  font-size: 12.5px;
+  color: var(--w-60);
+  margin-top: 2px;
+}
+
+/* =========================================
+   Login
+========================================= */
+.login-wrap {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+}
+
+.login-card {
+  width: min(460px, 100%);
+  padding: 26px;
+}
+
+.login-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.login-muted {
+  color: var(--w-60);
+  font-size: 14px;
+}
+
+.footer {
+  color: rgba(255, 255, 255, .55);
+  font-size: 12px;
+  margin-top: 18px;
+}
+
+/* =========================================
+   Give Heart page (4 cột x 5 hàng)
+   >>> FIX GIẬT: bỏ transform trên .user-card, cố định chiều cao, hover chỉ tác động avatar
+========================================= */
+.give-wrap {
+  padding: 18px 0 40px;
+}
+
+.search-wrap {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  margin: 6px auto 14px;
+  max-width: 720px;
+}
+
+.search-icon {
+  display: grid;
+  place-items: center;
+  color: var(--w-60);
+}
+
+.search-input {
+  background: rgba(255, 255, 255, .10);
+}
+
+.user-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 10px;
+}
+
+@media (min-width:768px) {
+  .user-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.user-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, .14), rgba(255, 255, 255, .10));
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 16px;
+  padding: 14px 10px 12px;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  color: #fff;
+  cursor: pointer;
+  /* FIX: không di chuyển phần tử -> tránh nháy layout */
+  transform: none !important;
+  will-change: opacity;
+  /* không làm reflow */
+  min-height: 164px;
+  /* 88 avatar + khoảng cách + tên => ổn định chiều cao */
+  contain: layout paint;
+  /* cô lập layout nội bộ */
+  transition: background .18s ease, border-color .18s ease, box-shadow .18s ease, opacity .18s ease;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, .22);
+}
+
+.user-card:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, .18), rgba(255, 255, 255, .12));
+  border-color: rgba(255, 255, 255, .24);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, .26);
+}
+
+.user-card:disabled {
+  opacity: .65;
+  cursor: default;
+}
+
+/* Avatar luôn kích thước cố định; hover chỉ “nhún” ảnh – không đổi hitbox của card */
+.user-avatar {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .28);
+  border: 1px solid rgba(255, 255, 255, .26);
+  transition: transform .15s ease, box-shadow .18s ease, border-color .18s ease;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.user-card:hover .user-avatar {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, .30);
+  border-color: rgba(255, 255, 255, .30);
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.heart-fab {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, var(--brand-600), var(--accent-600));
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(167, 139, 250, .35);
+  border: 1px solid rgba(255, 255, 255, .25);
+}
+
+.user-name {
+  font-weight: 800;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.25;
+  color: #fff;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 1.25em;
+  /* giữ cao ổn định ngay cả khi font tải chậm */
+}
+
+.no-results {
+  margin: 12px 0 8px;
+  background: rgba(255, 255, 255, .12);
+  border: 1px solid rgba(255, 255, 255, .22);
+  color: var(--w-90);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.busy {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, .28);
+  backdrop-filter: blur(2px);
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, var(--brand-600), var(--accent-600));
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, .24);
+  box-shadow: 0 14px 30px rgba(167, 139, 250, .35);
+  z-index: 60;
+}
+
+.page-slab {
+  width: min(920px, 100%);
+  margin: 0 auto;
+}
+
+
+:root {
+  --btn-font: "Be Vietnam Pro", "Open Sans", "Noto Sans",
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+
+/* chỉ áp dụng cho nút */
+.btn,
+.btn>span,
+.btn>strong {
+  font-family: var(--btn-font);
+  font-weight: 700;
+  /* đậm vừa, rõ dấu tiếng Việt */
+  letter-spacing: .2px;
+  line-height: 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================================
+   Typography & utilities
+========================================= */
+h1 {
+  font-size: clamp(22px, 3.2vw, 30px);
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: .2px;
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.muted {
+  color: var(--w-60);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-6 {
+  margin-top: 24px;
+}
+
+/* =========================================
+   Responsive tweaks
+========================================= */
+@media (min-width:640px) {
+  .header-inner {
+    padding: 12px 0;
+  }
+
+  .login-card {
+    padding: 30px;
+  }
+}
+
+/* Reduced motion: tắt animation/transition cho máy yếu */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* =========================================
+   FIX: Sticky header/nav trong khu admin (give-wrap)
+   - Mặc định TRONG SUỐT, không còn dải nền
+   - Ghi đè cả inline style từ React bằng !important
+   - Không ảnh hưởng navbar global .header
+========================================= */
+.give-wrap [style*="position:sticky"],
+.give-wrap [style*="position: sticky"],
+.give-wrap header,
+.give-wrap nav,
+.give-wrap .sticky,
+.give-wrap .is-sticky,
+.give-wrap .toolbar-sticky {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Xoá luôn nền của pseudo-elements nếu có dùng để tạo “glass bar” */
+.give-wrap [style*="position:sticky"]::before,
+.give-wrap [style*="position: sticky"]::before,
+.give-wrap [style*="position:sticky"]::after,
+.give-wrap [style*="position: sticky"]::after,
+.give-wrap .sticky::before,
+.give-wrap .sticky::after,
+.give-wrap .is-sticky::before,
+.give-wrap .is-sticky::after,
+.give-wrap header::before,
+.give-wrap header::after,
+.give-wrap nav::before,
+.give-wrap nav::after {
+  content: none !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+/* Tuỳ chọn: nếu muốn 1 trang nào đó CÓ hiệu ứng kính, thêm class .sticky-glass vào phần tử đó */
+.sticky-glass {
+  background: linear-gradient(135deg, rgba(76, 29, 149, .16), rgba(192, 132, 252, .14)) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, .12) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .08) !important;
+}
