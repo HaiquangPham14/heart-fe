@@ -90,6 +90,8 @@ logs/
 .netlify/
 
 # === Images/build artifacts tạm ===
+
+# === gasdgasartifacts tạm ===
 *.tgz
 *.tar.gz
 
